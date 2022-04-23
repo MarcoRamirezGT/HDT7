@@ -1,0 +1,108 @@
+---
+title: "Informe HDT7"
+author: "Marco Ramirez 19588, Alfredo Quezada, Estuardo Hernandez"
+date: "22/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# HDT 7: Maquina Vectoriales de Soporte (SVM)
+
+```{r message=FALSE, warning=FALSE}
+#Importamos las librerias necesarias
+library(e1071)
+library(caret)
+#Leemos el dataset
+data<-read.csv('train.csv')
+#Cambiamos los nulls por 0
+data[is.na(data)] <- 0
+#Calculo de percentiles
+percentil <- quantile(data$SalePrice)
+#Percentiles
+estado<-c('Estado')
+data$Estado<-estado
+#Economica=0
+#Intermedia=1
+#Cara=2
+data <- within(data, Estado[SalePrice<=129975] <- 'Economica')
+data$Estado[(data$SalePrice>129975 & data$SalePrice<=163000)] <- 'Intermedia'
+data$Estado[data$SalePrice>163000] <- 'Cara'
+#Cambio de tipo de columnas, esto es necesario ya que para poder usar svm es necesario contar con datos numericos e indicar que la variable de estado es nuestra variable categorica, esto mediante el metodo as factor.
+data$SalePrice<-as.numeric(data$SalePrice)
+data$GrLivArea<-as.numeric(data$GrLivArea)
+data$GarageCars<-as.numeric(data$GarageCars)
+data$LotArea<-as.numeric(data$LotArea)
+data$Estado<-as.factor(data$Estado)
+#SVM
+#Indicamos el porcentaje de entranamiento
+porcentaje<-0.7
+#Semilla para que el experimento sea repetible
+set.seed(123)
+#Creamos el dataframe con los valores a los cuales vamos a determinar el valor de las casas
+datos<-data.frame(data$SalePrice,data$GrLivArea,data$GarageCars,data$LotArea,data$Estado)
+#Datos de entrenamiento y prueba
+corte <- sample(nrow(datos),nrow(datos)*porcentaje)
+train<-datos[corte,]
+test<-datos[-corte,]
+#Creamos el modelo
+modelosvm<-svm(data.Estado~., data = train, scale = F)
+
+
+```
+
+```{r}
+
+summary(modelosvm)
+```
+Como se observa se creo el modelo correctamente, indicando que poseemos 3 variables categoricas, los cuales son Cara, Intermedia y Economica. Con un kernel radial, siendo este el default. 
+
+```{r}
+
+plot(modelosvm,train,data.SalePrice~data.GrLivArea)
+```
+
+Al graficar nuestro modelo, se observa que poseemos mayor variedad de casas establecidas como caras, ademas que la grafica nos logra representar la clasificacion de las casas, recordemos que al ser aprendizaje no supervisado, la maquina no conoce etiquetas claras de los datos, por ello el algoritmo SVM nos permite clasificar las casas dependiendo de argumentos, en este caso como se muestra en la grafica, se evaluo mediante GrLiveArea y SalePrice.
+
+```{r}
+
+
+#Modelos
+modeloSVM_L<-svm(data.Estado~., data=train, cost=0.5, kernel="linear")#95%
+modeloSVM_R<-svm(data.Estado~., data=train, gamma=2^-5, kernel="radial")
+modeloSVM_R<-svm(data.Estado~., data=train, gamma=2^1, kernel="radial")
+#Prediccion
+prediccionL<-predict(modeloSVM_L,newdata=test[,1:4])
+prediccionR<-predict(modeloSVM_R,newdata=test[,1:4])
+#Modelo tuneado
+modeloTuneado<-tune.svm(data.Estado~., data=train, cost=c(0.01,0.1,0.5,1,5,10,16,20,32), kernel="linear")
+predMejorModelo<-predict(modeloTuneado$best.model,newdata = test[,1:4])
+
+
+
+```
+Se crearon los modelos con distintos C, Kernel y Gammas, con el fin de demostrar la diferencia entre cada uno, cabe mencionar, que tambien se tuneo un modelo, para optimizar el resultado. 
+
+#### Primer modelo
+```{r}
+confusionMatrix(test$data.Estado,prediccionL)
+```
+Como se observa este modelo tuvo una C de 0.5 y fue evaluado con un kernel lineal, dando como resultado una prediccion con precision de 0.9795, siendo esta muy alta, y cabe mencionar que como se observa esta no tuvo overfitting, ya que la precision no dio 1. Ademas, solo tuvo 9 casas erroneas, demostrando que fue una buena prediccion. 
+
+#### Segundo Modelo
+```{R}
+confusionMatrix(test$data.Estado,prediccionR)
+```
+
+Este segundo modelo se creo con una gamma de 2^-5 y kernel radial, obteniendo una precision de 0.93, siendo esta mas baja que la anterior, teniendo 29 casas erroneas. Indicando que este modelo no fue el mejor de todos, ademas se observa que tampoco tiene overfitting.
+
+#### Tercer modelo tuneado
+
+```{r}
+confusionMatrix(test$data.Estado,predMejorModelo)
+
+```
+
+Para este modelo fue necesario tunearlo, esto fue mediante distintos valores de C, el cual atraves de iteracion iba alternando de C encontrando el valor mas optimo, en este caso se uso valores de C de 0.01,0.1,0.5,1,5,10,16,20,32 y con un kernel lineal. Obteniendo como resultado una precision de 0.9841, siendo esta la precision mas alta de los otros dos modelos, esto gracias al tuneo realizado. Y nuevamente como se observa no tiene overfitting ya que el valor devuelto no es 1. 
