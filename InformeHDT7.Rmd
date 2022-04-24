@@ -1,6 +1,6 @@
 ---
 title: "Informe HDT7"
-author: "Marco Ramirez 19588, Alfredo Quezada, Estuardo Hernandez"
+author: "Marco Ramirez 19588, Alfredo Quezada 191002, Estuardo Hernandez"
 date: "22/4/2022"
 output: html_document
 ---
@@ -105,4 +105,22 @@ confusionMatrix(test$data.Estado,predMejorModelo)
 
 ```
 
-Para este modelo fue necesario tunearlo, esto fue mediante distintos valores de C, el cual atraves de iteracion iba alternando de C encontrando el valor mas optimo, en este caso se uso valores de C de 0.01,0.1,0.5,1,5,10,16,20,32 y con un kernel lineal. Obteniendo como resultado una precision de 0.9841, siendo esta la precision mas alta de los otros dos modelos, esto gracias al tuneo realizado. Y nuevamente como se observa no tiene overfitting ya que el valor devuelto no es 1. 
+Para este modelo fue necesario tunearlo, esto fue mediante distintos valores de C, el cual atraves de iteracion iba alternando de C encontrando el valor mas optimo, en este caso se uso valores de C de 0.01,0.1,0.5,1,5,10,16,20,32 y con un kernel lineal. Obteniendo como resultado una precision de 0.9841, siendo esta la precision mas alta de los otros dos modelos, esto gracias al tuneo realizado. Y nuevamente como se observa no tiene overfitting ya que el valor devuelto no es 1.
+
+
+### Comparativa entre los tres modelos: 
+
+Para realizar esta comparativa, haremos mencion de los tres modelos en base a su numero, es decir, los modelos seran denominados de la siguiente manera: 1, 2 y 3. 
+Empezamos por el modelo 1, como se puede observar en el la matriz de confusion, tenemos un nivel de acierto de 97%, lo cual podemos decir que es extremadamente bueno, podemos decir que basicamente no tuvo equivocacion, siguiendo con el 2, alli podemos notar un numero mas bajo, estamos hablando de un nivel de acierto del 93%, teniendo un porcentaje de error del 7%, el mas bajo de los modelos que creamos, por ultimo en el modelo 3, logramos tener un nivel de 98%, es el mejor porcentaje que hemos tenido a lo largo de las hojas de trabajo. 
+
+
+### Comparativa entre el mejor modelo y los metodos pasados: 
+
+El resultado de nuestros metodos pasados, estan de la siguiente manera: 
+
+1. Naive Bayes: 0.93
+2. Random Forest: 0.82
+3. Arbol de decisión: 0.70
+
+Como podemos observar y tomando en cuenta el valor del modelo tuneado, podemos decir que la eficiencia del ultimo modelo creado en esta hoja de trabajo fue superior a lo metodos pasados, el mas cercano fue el metodo de Naive Bayes, pero si en cuanto a demora nos refererimos, realmente los 4 modelos se toman el mismo tiempo de ejecucion, por lo que el tiempo no es un factor que sea determinante al momento de elegir un modelo.  
+
