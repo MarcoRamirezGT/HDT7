@@ -1,6 +1,6 @@
 ---
 title: "Informe HDT7"
-author: "Marco Ramirez 19588, Alfredo Quezada 191002, Estuardo Hernandez"
+author: "Marco Ramirez 19588, Alfredo Quezada 191002, Estuardo Hernandez 19202"
 date: "22/4/2022"
 output: html_document
 ---
@@ -124,3 +124,9 @@ El resultado de nuestros metodos pasados, estan de la siguiente manera:
 
 Como podemos observar y tomando en cuenta el valor del modelo tuneado, podemos decir que la eficiencia del ultimo modelo creado en esta hoja de trabajo fue superior a lo metodos pasados, el mas cercano fue el metodo de Naive Bayes, pero si en cuanto a demora nos refererimos, realmente los 4 modelos se toman el mismo tiempo de ejecucion, por lo que el tiempo no es un factor que sea determinante al momento de elegir un modelo.  
 
+
+### Modelo de regresión usando el precio de la casa:
+
+
+
+### Comparativa del modelo de regresión con el de regresion lineal:

@@ -66,6 +66,18 @@ confusionMatrix(test$data.Estado,prediccionR)
 confusionMatrix(test$data.Estado,predMejorModelo)
 
 
+#Regresion lineal
+fitLMPW<-lm(data.SalePrice~ ., data = train)
+predL<-predict(fitLMPW, newdata = test)
+#Verificando la predicci?n
+resultados<-data.frame(test$data.SalePrice,predL)
+ggplot(data=train,mapping = aes(x=data.SalePrice,y=data.GrLivArea ))+
+  geom_point(color='red',size=2)+
+  geom_smooth(method = 'lm',se=TRUE,color='black')+
+  labs(title = 'Precio de venta ~ Pies cuadrados de vivienda',x="Precio de venta",y='Pies cuadrados de vivienda')+
+  theme_bw()+theme(plot.title = element_text(hjust = 0.5))
+
+
 # #Overfitting
 # library(ModelMetrics)
 # 
