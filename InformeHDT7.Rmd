@@ -127,6 +127,31 @@ Como podemos observar y tomando en cuenta el valor del modelo tuneado, podemos d
 
 ### Modelo de regresión usando el precio de la casa:
 
+```{r}
+
+#Regresion lineal
+fitLMPW<-lm(data.SalePrice~ ., data = train)
+predL<-predict(fitLMPW, newdata = test)
+#Verificando la predicci?n
+resultados<-data.frame(test$data.SalePrice,predL)
+i10a<-head(resultados, n=5)
+i10b<-ggplot(data=train,mapping = aes(x=data.SalePrice,y=data.GrLivArea ))+
+  geom_point(color='red',size=2)+
+  geom_smooth(method = 'lm',se=TRUE,color='black')+
+  labs(title = 'Precio de venta ~ Pies cuadrados de vivienda',x="Precio de venta",y='Pies cuadrados de vivienda')+
+  theme_bw()+theme(plot.title = element_text(hjust = 0.5))
 
 
-### Comparativa del modelo de regresión con el de regresion lineal:
+```
+
+```{r}
+i10a
+i10b
+```
+
+Partiendo de la tabla anterior se concluye que es un buen modelo porque los precios de las casas no se alejan mucho de los precios reales. También la gráfica afirma que la correlación de las variables del modelo es muy buena. Además, gran parte de los datos no está sobre la línea, indicando que no hay overfitting.
+
+
+### Comparativa del modelo de regresión con los anteriores:
+
+Este último modelo fue más rápido de procesar, sin embargo, no es el mejor para predecir. Esto útimo no quiere decir que es ineficiente o poco efectivo.

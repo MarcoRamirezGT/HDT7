@@ -71,6 +71,7 @@ fitLMPW<-lm(data.SalePrice~ ., data = train)
 predL<-predict(fitLMPW, newdata = test)
 #Verificando la predicci?n
 resultados<-data.frame(test$data.SalePrice,predL)
+head(resultados, n=5)
 ggplot(data=train,mapping = aes(x=data.SalePrice,y=data.GrLivArea ))+
   geom_point(color='red',size=2)+
   geom_smooth(method = 'lm',se=TRUE,color='black')+
